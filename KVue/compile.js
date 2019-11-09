@@ -19,11 +19,11 @@ class Compile {
 
     // 将宿主元素中的代码片段拿出来遍历，会更高效
     node2Fragment(el) {
-        const frag = document.createDocumentFragment;
+        const frag = document.createDocumentFragment();
 
         // 将el元素全部搬家至frag
         let child;
-        while(child = el.firstChild) {
+        while((child = el.firstChild)) {
             frag.appendChild(child);
         }
         return frag;
