@@ -8,13 +8,13 @@ const state = {
 }
 
 const mutations = {
-  add(state) {
-    state.count ++;
-    return state.count;
+  add(state, val) {
+    state.count += val;
+    // return state.count;
   },
   reduce(state) {
     state.count --;
-    return state.count;
+    // return state.count;
   }
 };
 
