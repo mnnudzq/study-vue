@@ -33,6 +33,7 @@ const actions = {
     setTimeout(() => {
       commit('reduce');
     }, 3000);
+    console.log('竟然比reduce先执行');
   }
 };
 
