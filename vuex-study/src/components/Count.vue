@@ -41,7 +41,11 @@ import {mapState, mapMutations, mapGetters} from 'vuex'
         computed: {
             // es6解构
             ...mapState(['count']),
-            ...mapGetters(['count2'])
+            // ...mapGetters(['count2'])
+            // getters方式2
+            count2() {
+                return this.$store.getters.count2;
+            }
         },
         methods: {
             // test() {
