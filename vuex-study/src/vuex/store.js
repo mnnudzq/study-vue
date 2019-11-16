@@ -9,6 +9,8 @@ const state = {
 };
 
 // vuex motheds
+// 同步方法
+// 为什么mutations要做成同步，和actions区分开来
 const mutations = {
   add(state, val) {
     state.count += val;
@@ -17,6 +19,20 @@ const mutations = {
   reduce(state) {
     state.count --;
     // return state.count;
+  }
+};
+
+// vuex 异步队列方法
+const actions = {
+  addAction(context, val) {
+    context.commit('add', val);
+  },
+  // 写法2
+  reduceAction({commit}) {
+    // 模拟异步
+    setTimeout(() => {
+      commit('reduce');
+    }, 3000);
   }
 };
 
@@ -30,5 +46,6 @@ const getters = {
 export default new Vuex.Store({
   state,
   mutations,
-  getters
+  getters,
+  actions
 })
