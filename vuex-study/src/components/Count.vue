@@ -7,14 +7,16 @@
       <button @click="$store.commit('reduce')">-</button>
       -->
       <!-- 方式2 -->
-      <button @click="add(5)">+</button>
+      <button @click="add(5)">+5</button>
+      <button @click="addAction(10)">+10</button>
       <button @click="reduce">-</button>
+      <button @click="reduceAction">-</button>
       {{count2}}
     </div>
 </template>
 
 <script>
-import {mapState, mapMutations, mapGetters} from 'vuex'
+import {mapState, mapMutations, mapGetters, mapActions} from 'vuex'
     export default {
         name: "Count",
         data() {
@@ -52,7 +54,8 @@ import {mapState, mapMutations, mapGetters} from 'vuex'
             //     this.count = this.$store.commit('add');
             //     // this.$store.state.count = count;
             // }
-            ...mapMutations(['add', 'reduce'])
+            ...mapMutations(['add', 'reduce']),
+            ...mapActions(['addAction', 'reduceAction'])
         }
     }
 </script>
