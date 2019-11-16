@@ -1,9 +1,12 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Router from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
+import Cart from "../views/Cart.vue";
+import History from "../utils/history";
 
-Vue.use(VueRouter)
+Vue.use(History);
+Vue.use(Router);
 
 const routes = [
   {
@@ -15,6 +18,11 @@ const routes = [
     path: '/login',
     name: 'login',
     component: Login
+  },
+  {
+    path: "/cart",
+    name: "cart",
+    component: Cart
   },
   {
     path: '/about',
@@ -29,11 +37,17 @@ const routes = [
   }
 ];
 
-const router = new VueRouter({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
 });
+
+// 扩展Router，添加goBack方法
+Router.prototype.goBack = function() {
+  this.isBack = true;
+  this.back();
+};
 
 
 // 路由守卫
@@ -52,6 +66,18 @@ router.beforeEach((to, from, next) => {
     }
   } else { // 不需要登录验证
     next();
+  }
+});
+
+// 每次从路由出来以后
+router.afterEach((to) => {
+  if (router.isBack) {
+    History.pop();
+    router.isBack = false;
+    router.transitionName = "route-back";
+  } else {
+    History.push(to.path);
+    router.transitionName = "route-forward";
   }
 });
 

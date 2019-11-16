@@ -1,8 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import us from '../service/user'
+import user from './user'
+import goods from './goods'
+import cart from './cart'
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
@@ -33,6 +36,7 @@ export default new Vuex.Store({
       commit("setLoginState", false);
     }
   },
-  modules: {
+  modules:{
+    user, goods, cart
   }
 })
