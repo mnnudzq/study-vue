@@ -9,12 +9,12 @@
       <!-- 方式2 -->
       <button @click="add(5)">+</button>
       <button @click="reduce">-</button>
-      {{$store.state.count}}
+      {{count2}}
     </div>
 </template>
 
 <script>
-import {mapState, mapMutations} from 'vuex'
+import {mapState, mapMutations, mapGetters} from 'vuex'
     export default {
         name: "Count",
         data() {
@@ -40,7 +40,8 @@ import {mapState, mapMutations} from 'vuex'
         // 写法4
         computed: {
             // es6解构
-            ...mapState(['count'])
+            ...mapState(['count']),
+            ...mapGetters(['count2'])
         },
         methods: {
             // test() {
