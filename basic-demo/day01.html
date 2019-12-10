@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>百度音乐排行榜</title>
+
+    <style>
+        .panel {
+            margin: auto;
+            width: 800px;
+            background-color: #ffffff;
+            padding: 10px;
+        }
+        h3 {
+            text-align: center;
+        }
+        .row {
+            width: 100%;
+        }
+        tr, th {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="panel">
+    <div class="row">
+        <h3>百度音乐排行榜</h3>
+    </div>
+    <nav class="row filter"><a>已收藏</a> <a>未收藏</a> <a>默认</a></nav>
+    <nav class="row sort"><a>按数量从小到大</a> <a>按数量从大到小</a> <a>默认</a></nav>
+    <table class="row">
+        <thead>
+        <tr>
+            <th width="10%"><input type="checkbox" id="checkAll"></th>
+            <th width="35%">名称</th>
+            <th width="10%">数量</th>
+            <th width="45%">操作</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <div class="row">
+        <label>名称：</label>
+        <input type="text" id="name" style="width: 25%">
+        <label>数量：</label>
+        <input type="text" id="num" style="width: 25%">
+        <button id="addBtn">添加</button>
+        <button id="delBtn">删除</button>
+    </div>
+</div>
+<script>
+    let data = [{
+        id: 0,
+        txt: '青花瓷 - 周杰伦',
+        checked: true,
+        num: 7,
+        liked: true
+    }, {
+        id: 1,
+        txt: '泡沫 - 邓紫棋',
+        checked: false,
+        num: 13,
+        liked: true
+    }, {
+        id: 2,
+        txt: '爱的供养 - 杨幂',
+        checked: true,
+        num: 9,
+        liked: false
+    }];
+
+    {
+        let checkAll  = document.querySelector('#checkAll'),
+            addBtn    = document.querySelector('#addBtn'),
+            delBtn    = document.querySelector('#delBtn'),
+            nameInput = document.querySelector('#name'),
+            numInput  = document.querySelector('#num'),
+            filter    = document.querySelectorAll('.filter a'),
+            sort      = document.querySelectorAll('.sort a'),
+            tbody     = document.querySelector('table tbody');
+        let likeState = 2, sortState = 2; // 0-已收藏 1-未收藏 2-默认
+
+        let filterFn = [
+            (item) => item.liked,
+            (item) => !item.liked,
+            () => true
+        ], sortFn = [
+            (item1, item2) => item1.num - item2.num,
+            (item1, item2) => item2.num - item1.num,
+            () => true
+        ];
+
+        let isCheckAll = () => {return data.every(item => item.checked) && data.length > 0};
+
+        let renderFn = () => {
+            let nowData = data.filter(filterFn[likeState]).sort(sortFn[sortState]);
+
+            tbody.innerHTML = nowData.map(item => `
+                <tr>
+                    <td><input type="checkbox" ${item.checked ? 'checked' : ''} /></td>
+                    <td>${item.txt}</td>
+                    <td>${item.num}</td>
+                    <td data-id="${item.id}">
+                        <a href="javascript:;" class="like">${item.liked ? '取消收藏' : '收藏'}</a>
+                        <a href="javascript:;" class="del">删除</a>
+                    </td>
+                </tr>
+            `).join('');
+            checkAll.checked = isCheckAll();
+            let like = document.querySelectorAll('.like'),
+                del  = document.querySelectorAll('.del');
+
+            dealEvent(like, del);
+        };
+
+        let dealEvent = (like, del) => {
+            like.forEach(item => {
+                item.onclick = () => {
+                    let parent = item.parentNode,
+                        id     = parent.dataset.id;
+                    data.forEach(m => {
+                        if (m.id == id) {
+                            m.liked = !m.liked;
+                        }
+                    });
+                    renderFn();
+                }
+            });
+
+            del.forEach(item => {
+                item.onclick = () => {
+                    let parent = item.parentNode,
+                        id     = parent.dataset.id;
+                    data = data.filter(item => item.id != id);
+                    renderFn();
+                }
+            });
+        };
+
+        renderFn();
+
+        let addFn = () => {
+            let name = nameInput.value, num = numInput.value;
+            if (!name.trim()) {
+                alert('名称不能为空');
+                return;
+            }
+            if (!num && typeof num == 'number') {
+                alert('数量不符合规范');
+                return;
+            }
+            data.push({
+                id: new Date().getTime(),
+                txt: name,
+                num,
+                liked: false,
+                checked: false
+            });
+            renderFn();
+            nameInput.value = '';
+            numInput.value = null;
+        };
+        addBtn.onclick = addFn;
+
+        let delCheckedFn = () => {
+            data = data.filter(item => !item.checked);
+            renderFn();
+        };
+        delBtn.onclick = delCheckedFn;
+
+        checkAll.onchange = function () {
+            data.forEach(item => {item.checked = this.checked});
+            renderFn();
+        };
+
+        filter.forEach((item, index) => {
+            item.onclick = () => {
+                likeState = index;
+                renderFn();
+            }
+        });
+
+        sort.forEach((item, index) => {
+            item.onclick = () => {
+                sortState = index;
+                renderFn();
+            }
+        });
+    }
+</script>
+</body>
+</html>
