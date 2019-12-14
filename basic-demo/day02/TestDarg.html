@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        #red-box {
+            position: absolute;
+            top: 100px;
+            left: 100px;
+            width: 100px;
+            height: 100px;
+            background-color: red;
+        }
+        #green-box {
+            position: absolute;
+            top: 200px;
+            left: 200px;
+            width: 100px;
+            height: 100px;
+            background-color: green;
+        }
+    </style>
+
+    <script src="./Drag.js"></script>
+</head>
+<body>
+<div id="red-box">文字</div>
+<div id="green-box">文字</div>
+
+<script>
+    {
+        // 获取box元素
+        let redBox   = document.querySelector("#red-box"),
+            greenBox = document.querySelector("#green-box");
+        // 实例化对应对象
+        let redDrag   = new Drag(redBox),
+            greenDrag = new Drag(greenBox);
+        greenDrag.type = 1;
+    }
+</script>
+</body>
+</html>

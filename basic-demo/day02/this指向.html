@@ -2,31 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title>test this</title>
 </head>
 <body>
 <script>
 let f1 = function () { // 谁调用指向谁
     console.log(this);
-}
+};
 let f2 = () => { // 本身没有this，其this指向声明时作用域里的this
     console.log(this);
-}
-class Drag {
+};
+class Test {
     constructor(f) {
         this.f = f;
+        this.obj = {
+            f3: function () {
+                console.log(this);
+            },
+            f4: () => {
+                console.log(this);
+            }
+        }
     }
 }
-f1();
-f2();
-document.onclick = f1();
-document.body.onclick = f2();
+document.onclick = f1;
+document.body.onclick = f2;
 
-document.onclick;
-document.body.onclick;
+f1(); // Window
+f2(); // Window
 
-new Drag(f1).f();
-new Drag(f2).f();
+document.onclick(); // #document
+document.body.onclick(); // Window
+
+new Test(f1).f(); // Test实例
+new Test(f2).f(); // Window
+
+new Test().obj.f3(); // Test实例的obj
+new Test().obj.f4(); // Test实例
 </script>
 </body>
 </html>
