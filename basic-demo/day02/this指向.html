@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<script>
+let f1 = function () { // 谁调用指向谁
+    console.log(this);
+}
+let f2 = () => { // 本身没有this，其this指向声明时作用域里的this
+    console.log(this);
+}
+class Drag {
+    constructor(f) {
+        this.f = f;
+    }
+}
+f1();
+f2();
+document.onclick = f1();
+document.body.onclick = f2();
+
+document.onclick;
+document.body.onclick;
+
+new Drag(f1).f();
+new Drag(f2).f();
+</script>
+</body>
+</html>
