@@ -6,39 +6,58 @@
 </head>
 <body>
 <script>
-let f1 = function () { // 谁调用指向谁
+    // 全局环境
     console.log(this);
-};
-let f2 = () => { // 本身没有this，其this指向声明时作用域里的this
-    console.log(this);
-};
-class Test {
-    constructor(f) {
-        this.f = f;
-        this.obj = {
-            f3: function () {
-                console.log(this);
-            },
-            f4: () => {
-                console.log(this);
-            }
+
+    let f1 = function () {
+        console.log(this);
+    };
+    document.onclick = f1;
+
+    f1(); // Window
+    document.onclick(); // #document
+
+    let f2 = () => {
+        console.log(this);
+    };
+    document.onclick = f2;
+
+    f2(); // Window
+    document.onclick(); // Window
+
+    this.x = 9;    // this 指向全局的 "window" 对象
+    let module = {
+        x: 81,
+        getX: function() {
+            console.log(this.x);
+        },
+        _getX: () => {
+            console.log(this.x);
+        }
+    };
+    module.getX(); // 81
+    module._getX(); // 9
+
+    // 尝试使用call来设定this
+    module.getX.call(this); //
+    module._getX.call(module); //
+
+    let getX = module.getX.bind(this),
+        _getX = module._getX.bind(module);
+    getX();
+    _getX();
+
+    class Test {
+        constructor() {
+            this.num = 5;
+            this.getNum = function () {
+                console.log(this.num);
+            };
         }
     }
-}
-document.onclick = f1;
-document.body.onclick = f2;
+    let t = new Test();
+    t.getNum();
 
-f1(); // Window
-f2(); // Window
-
-document.onclick(); // #document
-document.body.onclick(); // Window
-
-new Test(f1).f(); // Test实例
-new Test(f2).f(); // Window
-
-new Test().obj.f3(); // Test实例的obj
-new Test().obj.f4(); // Test实例
 </script>
 </body>
 </html>
